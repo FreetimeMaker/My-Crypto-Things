@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@metaplex-foundation/umi-bundle-defaults": "^1.5.1"
+  }
+}
