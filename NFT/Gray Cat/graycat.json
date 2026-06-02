@@ -1,0 +1,17 @@
+{
+    "name": "Gray Cat NFT",
+    "symbol": "GCNFT",
+    "description": "This is my first NFT on based on the Solana Blockchain.",
+    "image": "https://freetimemaker.github.io/Freetime-Maker-Shop/images/cat.png",
+    "attributes": [
+        { "trait_type": "Background", "value": "Gray" },
+        { "trait_type": "Eyes", "value": "Blue" }
+    ],
+    "seller_fee_basis_points": 500,
+    "creators": [
+        {
+        "address": "5qxFyNXFrJ9NCs6b5CwbcU2hQYRB6xu921bgc9wG8ZHk",
+        "share": 100
+        }
+    ]
+}
