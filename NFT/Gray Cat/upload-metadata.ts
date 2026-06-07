@@ -1,9 +1,27 @@
-// upload-metadata.ts
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
-import { createArweaveUploader } from "@metaplex-foundation/umi-uploader-arweave";
+import { createBundlrUploader } from "@metaplex-foundation/umi-uploader-bundlr";
+import { keypairIdentity, createSignerFromKeypair } from "@metaplex-foundation/umi";
+import fs from "fs";
 
-const umi = createUmi("https://api.mainnet-beta.solana.com");
-const uploader = createArweaveUploader(umi);
+// --- LOAD WALLET SECRET KEY ---
+const secret = JSON.parse(fs.readFileSync("id.json", "utf8"));
+const secretKey = new Uint8Array(secret);
+
+// --- INIT UMI ---
+const umi = createUmi("https://rpc.shyft.to/solana/mainnet?api_key=JrLUALKtWcq0ucmW");
+
+// --- CREATE UMI KEYPPAIR ---
+const umiKeypair = umi.eddsa.createKeypairFromSecretKey(secretKey);
+
+// --- WRAP INTO FULL SIGNER ---
+const signer = createSignerFromKeypair(umi, umiKeypair);
+
+// --- SET IDENTITY + PAYER ---
+umi.use(keypairIdentity(signer));
+umi.payer = signer;
+
+// --- CREATE UPLOADER ---
+const uploader = createBundlrUploader(umi);
 
 (async () => {
     const metadata = {
