@@ -1,3 +1,4 @@
+import { Connection } from "@solana/web3.js";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { irysUploader } from "@metaplex-foundation/umi-uploader-irys";
 import { keypairIdentity, createSignerFromKeypair } from "@metaplex-foundation/umi";
@@ -7,8 +8,17 @@ import fs from "fs";
 const secret = JSON.parse(fs.readFileSync("id.json", "utf8"));
 const secretKey = new Uint8Array(secret);
 
+// --- CONNECTION MIT EXPLIZITEM WS-ENDPOINT ---
+const connection = new Connection(
+    "https://rpc.shyft.to/solana/mainnet?api_key=JrLUALKtWcq0ucmW",
+    {
+        commitment: "confirmed",
+        wsEndpoint: "wss://rpc.shyft.to/solana/mainnet?api_key=JrLUALKtWcq0ucmW",
+    }
+);
+
 // --- INIT UMI ---
-const umi = createUmi("https://rpc.shyft.to/solana/mainnet?api_key=JrLUALKtWcq0ucmW");
+const umi = createUmi(connection);
 
 // --- CREATE UMI KEYPAIR ---
 const umiKeypair = umi.eddsa.createKeypairFromSecretKey(secretKey);
