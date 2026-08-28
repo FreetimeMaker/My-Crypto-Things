@@ -10,10 +10,10 @@ const secretKey = new Uint8Array(secret);
 
 // Connection mit explizitem WS-Endpoint
 const connection = new Connection(
-    "https://rpc.shyft.to?api_key=JrLUALKtWcq0ucmW",
+    "https://mainnet.helius-rpc.com/?api-key=5dd7803b-bb01-4226-a23f-6c5e5516b7ef",
     {
         commitment: "confirmed",
-        wsEndpoint: "wss://rpc.shyft.to?api_key=JrLUALKtWcq0ucmW",
+        wsEndpoint: "wss://mainnet.helius-rpc.com/?api-key=5dd7803b-bb01-4226-a23f-6c5e5516b7ef",
     }
 );
 
