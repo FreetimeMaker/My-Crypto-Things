@@ -1,38 +1,37 @@
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
-import { mplTokenMetadata, createNft } from "@metaplex-foundation/mpl-token-metadata";
-import { keypairIdentity, createSignerFromKeypair, generateSigner, percentAmount } from "@metaplex-foundation/umi";
+import { createBundlrUploader } from "@metaplex-foundation/umi-uploader-bundlr";
+import { keypairIdentity, createSignerFromKeypair } from "@metaplex-foundation/umi";
 import fs from "fs";
 
-// --- LOAD WALLET SECRET KEY ---
+// Wallet laden
 const secret = JSON.parse(fs.readFileSync("id.json", "utf8"));
 const secretKey = new Uint8Array(secret);
 
-// --- INIT UMI ---
+// UMI mit funktionierendem RPC
 const umi = createUmi("https://rpc.shyft.to/solana/mainnet?api_key=JrLUALKtWcq0ucmW");
 
-// --- CREATE A UMI KEYPPAIR ---
+// UMI-Keypair erzeugen
 const umiKeypair = umi.eddsa.createKeypairFromSecretKey(secretKey);
 
-// --- WRAP IT INTO A FULL SIGNER (IMPORTANT) ---
+// Signer erzeugen
 const signer = createSignerFromKeypair(umi, umiKeypair);
 
-// --- SET IDENTITY + PAYER ---
+// Signer setzen
 umi.use(keypairIdentity(signer));
 umi.payer = signer;
 
-// --- LOAD TOKEN METADATA PLUGIN ---
-umi.use(mplTokenMetadata());
+// Bundlr-Uploader
+const uploader = createBundlrUploader(umi);
 
 (async () => {
-    const mint = generateSigner(umi);
-
-    await createNft(umi, {
-        mint,
+    const metadata = {
         name: "Grey Cat NFT",
         symbol: "GCNFT",
-        uri: "https://gateway.irys.xyz/FPPjaZ828MGUYFn6MVMcDJjZRaChG4A2A8rxNoKvbpU",
-        sellerFeeBasisPoints: percentAmount(10),
-    }).sendAndConfirm(umi);
+        description: "A cute grey cat NFT",
+        image: "https://gateway.irys.xyz/FPPjaZ828MGUYFn6MVMcDJjZRaChG4A2A8rxNoKvbpU",
+        attributes: [{ trait_type: "Mood", value: "Normal" }],
+    };
 
-    console.log("NFT Mint Address:", mint.publicKey.toString());
+    const uri = await uploader.uploadJson(metadata);
+    console.log("Metadata URI:", uri);
 })();
