@@ -1,0 +1,11 @@
+{
+   "name": "Gray Cat NFT",
+   "description": "The Official Gray Cat NFT from Freetime Maker.",
+   "image": "https://freetimemaker.github.io/Freetime-Maker-Shop/images/cat.png",
+   "attributes": [
+       {
+           "trait_type": "Color",
+           "value": "Gray"
+       }
+   ]
+}
