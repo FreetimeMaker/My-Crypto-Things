@@ -1,5 +1,5 @@
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
-import { createBundlrUploader } from "@metaplex-foundation/umi-uploader-bundlr";
+import { irysUploader } from "@metaplex-foundation/umi-uploader-irys";
 import { keypairIdentity, createSignerFromKeypair } from "@metaplex-foundation/umi";
 import fs from "fs";
 
@@ -10,18 +10,16 @@ const secretKey = new Uint8Array(secret);
 // --- INIT UMI ---
 const umi = createUmi("https://rpc.shyft.to/solana/mainnet?api_key=JrLUALKtWcq0ucmW");
 
-// --- CREATE UMI KEYPPAIR ---
+// --- CREATE UMI KEYPAIR ---
 const umiKeypair = umi.eddsa.createKeypairFromSecretKey(secretKey);
 
 // --- WRAP INTO FULL SIGNER ---
 const signer = createSignerFromKeypair(umi, umiKeypair);
 
-// --- SET IDENTITY + PAYER ---
+// --- SET IDENTITY + PAYER + UPLOADER PLUGIN ---
 umi.use(keypairIdentity(signer));
+umi.use(irysUploader());
 umi.payer = signer;
-
-// --- CREATE UPLOADER ---
-const uploader = createBundlrUploader(umi);
 
 (async () => {
     const metadata = {
@@ -32,6 +30,6 @@ const uploader = createBundlrUploader(umi);
         attributes: [{ trait_type: "Mood", value: "Normal" }],
     };
 
-    const uri = await uploader.uploadJson(metadata);
+    const uri = await umi.uploader.uploadJson(metadata);
     console.log("Metadata URI:", uri);
 })();
