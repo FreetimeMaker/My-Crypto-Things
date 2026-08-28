@@ -10,10 +10,10 @@ const secretKey = new Uint8Array(secret);
 
 // Connection mit explizitem WS-Endpoint
 const connection = new Connection(
-    "https://rpc.shyft.to/solana/mainnet?api_key=JrLUALKtWcq0ucmW",
+    "https://rpc.shyft.to?api_key=JrLUALKtWcq0ucmW",
     {
         commitment: "confirmed",
-        wsEndpoint: "wss://rpc.shyft.to/solana/mainnet?api_key=JrLUALKtWcq0ucmW",
+        wsEndpoint: "wss://rpc.shyft.to?api_key=JrLUALKtWcq0ucmW",
     }
 );
 
